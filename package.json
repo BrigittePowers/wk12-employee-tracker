@@ -1,0 +1,29 @@
+{
+  "name": "employee-tracker",
+  "version": "1.0.0",
+  "description": "an employee management portal",
+  "main": "server.js",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BrigittePowers/wk12-employee-tracker.git"
+  },
+  "author": "Brigitte Powers",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BrigittePowers/wk12-employee-tracker/issues"
+  },
+  "homepage": "https://github.com/BrigittePowers/wk12-employee-tracker#readme",
+  "dependencies": {
+    "console.table": "^0.10.0",
+    "dotenv": "^10.0.0",
+    "inquirer": "^8.2.0",
+    "mysql2": "^2.3.0"
+  }
+}
