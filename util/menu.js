@@ -22,6 +22,7 @@ const tableMenu = {
     remDepartment: "Delete a deparment",
     addRole: "Add a role",
     remRole: "Delete a role",
+    return: "Return to main menu"
 }
 
 module.exports = {mainMenu, empMenu, tableMenu};
