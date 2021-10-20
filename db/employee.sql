@@ -20,7 +20,8 @@ CREATE TABLE role (
     tips  BOOLEAN, -- are they on tip roll?
     department_id INT,
     FOREIGN KEY (department_id)
-    REFERENCES department(id) -- dept role id
+    REFERENCES department(id)
+    ON DELETE CASCADE -- if dept is deleted, remove roles under that dept
 );
 
 DROP TABLE IF EXISTS employee;
@@ -28,12 +29,12 @@ CREATE TABLE employee (
     id INT AUTO_INCREMENT PRIMARY KEY,
     first_name VARCHAR(30) NOT NULL, -- emp first name
     last_name VARCHAR(30) NOT NULL, -- emp last name
-    role_id INT NOT NULL,
+    role_id INT,
     FOREIGN KEY (role_id)
-    REFERENCES role(id) 
-    ON DELETE CASCADE,-- employee role
+    REFERENCES role(id)
+    ON DELETE SET NULL,-- if role is deleted, unassign employee
     manager_id INT, -- ref to another employee ID that is the manager
     FOREIGN KEY (manager_id)
     REFERENCES employee(id)
-    ON DELETE SET NULL
+    ON DELETE SET NULL -- unassign from a manager if manager is fired
 );

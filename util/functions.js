@@ -15,6 +15,7 @@ const db = mysql2.createConnection({
     database: process.env.DB_NAME
 })
 
+// main menu prompt
 function init() {{
     inquirer.prompt({
         type: 'list',
@@ -71,7 +72,102 @@ function init() {{
     })
 }}
 
-// == Functions ==
+
+
+// == Menu Functions ==
+function editDeptRole() {{
+    inquirer.prompt({
+        type: 'list',
+        name: 'dept',
+        message: 'Edit departments and roles',
+        choices: [
+            tableMenu.addDepartment,
+            tableMenu.remDepartment,
+            tableMenu.addRole,
+            tableMenu.remRole,
+            tableMenu.return,
+        ]
+    })
+    .then(answer => {
+        console.log(answer.dept);
+        switch(answer.dept) {
+            case tableMenu.addDepartment:
+                addDepartment();
+                break;
+
+            case tableMenu.remDepartment:
+                remove('remDept');
+                break;
+
+            case tableMenu.addRole:
+                addRole();
+                break;
+
+            case tableMenu.remRole:
+                remove('remRole');
+                break;
+
+            case tableMenu.return:
+                init();
+                break;
+        }
+    })
+}}
+
+function updateEmployee() {{
+    inquirer.prompt({
+        type: 'list',
+        name: 'emp',
+        message: 'Edit employee information',
+        choices: [
+            empMenu.addEmployee,
+            empMenu.remEmployee,
+            empMenu.updManager,
+            empMenu.updRole,
+            empMenu.return,
+        ]
+    })
+    .then(answer => {
+        console.log(answer.emp);
+        switch(answer.emp) {
+            case empMenu.addEmployee:
+                addEmployee();
+                break;
+
+            case empMenu.remEmployee:
+                remove('remEmp');
+                break;
+
+            case empMenu.updManager:
+                updateMng()
+                break;
+
+            case empMenu.updRole:
+                updateRole();
+                break;
+
+            case empMenu.return:
+                init();
+                break;
+        }
+    })
+}}
+
+// == Action Functions ==
+
+async function addDepartment() {
+    const addDeptName = await inquirer.prompt(askDeptName());
+    db.query(
+        'INSERT INTO department SET ?',
+        {
+            name: addDeptName.deptName,
+        },
+        (err, res) => {
+            if (err) throw err;
+            editDeptRole();
+        }
+    );
+}
 
 async function addEmployee() {
     const addname = await inquirer.prompt(askName());
@@ -83,7 +179,6 @@ async function addEmployee() {
                 type: 'list',
                 message: 'For which position was the employee hired?',
                 choices: () => res.map(res => res.title),
-                message: 'For which position was the employee hired?'
             }
         ]);
         let roleId;
@@ -139,6 +234,79 @@ async function addEmployee() {
     })
 }
 
+async function addRole() {
+    const addTitle = await inquirer.prompt(askTitle());
+    db.query(`SELECT department.id, department.name FROM department ORDER BY department.id;`, async (err, res) => {
+        if (err) throw err;
+        const { department } = await inquirer.prompt([
+            {
+                name: 'department',
+                type: 'list',
+                message: 'For which department was this role created?',
+                choices: () => res.map(res => res.name),
+            }
+        ]);
+        let deptId;
+        for (const row of res) {
+            if (row.name === department) {
+                deptId = row.id;
+                continue;
+            }
+        }
+        db.query(`SELECT * FROM role`, async (err, res) => {
+            if (err) throw err;
+            const addSalary = await inquirer.prompt([
+                {
+                    name: 'salary',
+                    type: 'input',
+                    message: 'What is the starting salary of this role?'
+                }
+            ])
+            const addTips = await inquirer.prompt([
+                {
+                    name: 'tips',
+                    type: 'list',
+                    message: 'Does this role recieve tips?',
+                    choices: [
+                        'Yes',
+                        'No'
+                    ]
+                }
+            ])
+            let tipsQ;
+            if (addTips.tips === 'yes') {
+                tipsQ = 1;
+            } else {
+                tipsQ = 0;
+            }
+            console.log('Role has been added. Please view all roles to verify...');
+            db.query(
+                'INSERT INTO role SET ?',
+                {
+                    title: addTitle.title,
+                    salary: addSalary.salary,
+                    tips: tipsQ,
+                    department_id: deptId
+                },
+                (err, res) => {
+                    if (err) throw err;
+                    editDeptRole();
+                }
+            );
+        })
+    })
+}
+
+function askDeptName() {
+    return ([
+        {
+            name: "deptName",
+            type: "input",
+            message: "What is the name of the new department?:  "
+        }
+    ]);
+}
+
 function askId() {
     return ([
         {
@@ -164,61 +332,32 @@ function askName() {
     ]);
 }
 
-function editDeptRole() {{
-    inquirer.prompt({
-        type: 'list',
-        name: 'dept',
-        message: 'Edit departments and roles',
-        choices: [
-            tableMenu.addDepartment,
-            tableMenu.remDepartment,
-            tableMenu.addRole,
-            tableMenu.remRole,
-            tableMenu.return,
-        ]
-    })
-    .then(answer => {
-        console.log(answer.dept);
-        switch(answer.dept) {
-            case tableMenu.addDepartment:
-                
-                break;
-
-            case tableMenu.remDepartment:
-                remove('remDept');
-                break;
-
-            case tableMenu.addRole:
-                
-                break;
-
-            case tableMenu.remRole:
-                remove('remRole');
-                break;
-
-            case tableMenu.return:
-                init();
-                break;
+function askTitle() {
+    return ([
+        {
+            name: "title",
+            type: "input",
+            message: "What is the name of the new role:  "
         }
-    })
-}}
+    ]);
+}
 
 function remove(str) {
     const promptQ = {
-        yes: "yes [emp id required]",
+        yes: "yes [cannot be undone]",
         no: "no [return to employee menu]"
     };
     inquirer.prompt([
         {
             name: "action",
             type: "list",
-            message: "Are you sure you wish to edit/delete this data? [action cannot be undone]",
+            message: "Are you sure you wish to edit/delete this data?",
             choices: [promptQ.yes, promptQ.no]
         }
     ]).then(answer => {
-        if (str === 'remEmp' && answer.action === "yes [delete]") removeEmployee();
-        else if (str === 'remDept' && answer.action === "yes [delete]") removeDepartment();
-        else if (str === 'remRole' && answer.action === "yes [delete]") removeRole();
+        if (str === 'remEmp' && answer.action === "yes [cannot be undone]") removeEmployee();
+        else if (str === 'remDept' && answer.action === "yes [cannot be undone]") removeDepartment();
+        else if (str === 'remRole' && answer.action === "yes [cannot be undone]") removeRole();
         else updateEmployee();
     });
 };
@@ -226,7 +365,7 @@ function remove(str) {
 async function removeDepartment() {
     const sql = `SELECT id AS id, name AS department 
     FROM department
-    ORDER BY id`;
+    ORDER BY id`; 
     db.query(sql, (err, res) => {
         if (err) throw err;
         console.log(``);
@@ -235,7 +374,6 @@ async function removeDepartment() {
         console.log(`==========================`);
         console.table(res);
         console.log(``);
-        init();
     })
 
     const answer = await inquirer.prompt([
@@ -285,44 +423,42 @@ async function removeEmployee() {
     updateEmployee();
 };
 
-function updateEmployee() {{
-    inquirer.prompt({
-        type: 'list',
-        name: 'emp',
-        message: 'Edit employee information',
-        choices: [
-            empMenu.addEmployee,
-            empMenu.remEmployee,
-            empMenu.updManager,
-            empMenu.updRole,
-            empMenu.return,
-        ]
+async function removeRole() {
+    const sql = `SELECT id AS id, title AS roles 
+    FROM role
+    ORDER BY id`; 
+    db.query(sql, (err, res) => {
+        if (err) throw err;
+        console.log(``);
+        console.log(`==========================`);
+        console.log('=== Roles ==');
+        console.log(`==========================`);
+        console.table(res);
+        console.log(``);
     })
-    .then(answer => {
-        console.log(answer.emp);
-        switch(answer.emp) {
-            case empMenu.addEmployee:
-                addEmployee();
-                break;
 
-            case empMenu.remEmployee:
-                remove('remEmp');
-                break;
-
-            case empMenu.updManager:
-                updateMng()
-                break;
-
-            case empMenu.updRole:
-                updateRole();
-                break;
-
-            case empMenu.return:
-                init();
-                break;
+    const answer = await inquirer.prompt([
+        {
+            name: "role",
+            type: "input",
+            message: "Enter the ID for the role  you want to remove:  "
         }
-    })
-}}
+    ]);
+
+    db.query('DELETE FROM role WHERE ?',
+        {
+            id: answer.role
+        },
+        function (err) {
+            if (err) throw err;
+        }
+    )
+    console.log(``);
+    console.log('Role has been successfully deleted. Returning to main menu...');
+    console.log(``);
+    console.log(``);
+    init();
+};
 
 async function updateMng() {
     const employeeId = await inquirer.prompt(askId());
@@ -446,7 +582,7 @@ function viewAllRoles() {
     FROM role
     INNER JOIN department
     ON role.department_id=department.id
-    ORDER BY role.id, department.name;`
+    ORDER BY role.id, department.name, title;`
     db.query(sql, (err, res) => {
         if (err) throw err;
         console.log(``);

@@ -1,174 +1,58 @@
-# 12 SQL: Employee Tracker
-`mysql -u root -p`
-## Your Task
+# TownPortal - Employee Tracker
+  
+  ## Description
+  *What is it and why was it made?*
 
-`npm init`
-`npm i` -- should grab our dependencies
+  TownPortal is a program through node that allows communication to a MySQL database. TP allows the creation of departments and job positions within those departments; it then allows one to add employee information and lookup database-stored info whenever needed. 
 
-## User Story
+  The ultimate goal of TownPortal is to allow one to keep track of their company employee data in a way that is succinct, comprehensible, and efficient. Ideally, it is a program that allows an employer to manage their company with reduced setbacks.
 
-```md
-AS A business owner
-I WANT to be able to view and manage the departments, roles, and employees in my company
-SO THAT I can organize and plan my business
-```
 
-## Acceptance Criteria
+  ![License for GitHub repo](https://img.shields.io/github/license/BrigittePowers/wk12-employee-tracker)
 
-```md
-WHEN I choose to view all departments
-THEN I am presented with a formatted table showing department names and department ids
+  ## Table of Contents
+  * [Installation](#installation)
+  * [Documentation](#documentation)
+  * [Usage](#usage)
+  * [Questions](#questions)
 
-WHEN I choose to view all roles
-THEN I am presented with the job title, role id, the department that role belongs to, and the salary for that role
+  ## Installation
+  *How to install dependencies*
 
-WHEN I choose to view all employees
-THEN I am presented with a formatted table showing employee data, including employee ids, first names, last names, job titles, departments, salaries, and managers that the employees report to
+  * The program runs with node.js. A package.json is already setup with all necessary dependencies. To run the program, simply navigate to the program's root folder in the command terminal and type: `npm i`
 
-WHEN I choose to add a department
-THEN I am prompted to enter the name of the department and that department is added to the database
+  *Connect to your MySQL server*
 
-WHEN I choose to add a role
-THEN I am prompted to enter the name, salary, and department for the role and that role is added to the database
+  * Use the .envEXAMPLE folder as a template to create your .env file. The example databse in employee.sql is named **employee_db**
 
-WHEN I choose to add an employee
-THEN I am prompted to enter the employee’s first name, last name, role, and manager, and that employee is added to the database
+  *How to run the program*
 
-WHEN I choose to update an employee role
-THEN I am prompted to select an employee to update and their new role and this information is updated in the database 
-```
+  * Navigate to the program's root folder in the command terminal and type: `npm start` or `node index.js`
 
-## Mock-Up
+  == Optional ==
+  Within your MySQL command line, you can run `source db/employee.sql` then `source db/seeds.sql` to view an example database with pre-populated employee information. This should serve as a demonstration of the program's capabilities.
 
-The following video shows an example of the application being used from the command line:
+   ## Documentation
 
-[![A video thumbnail shows the command-line employee management application with a play button overlaying the view.](./Assets/12-sql-homework-video-thumbnail.png)](https://2u-20.wistia.com/medias/2lnle7xnpk)
+   * [MySQL2 package](https://www.npmjs.com/package/mysql2)
+   * [Inquirer package](https://www.npmjs.com/package/inquirer)
+   * [console.table package](https://www.npmjs.com/package/console.table)
+   * [dotenv package](https://www.npmjs.com/package/dotenv)
 
-## Getting Started
 
-You’ll need to use the [MySQL2 package](https://www.npmjs.com/package/mysql2) to connect to your MySQL database and perform queries, the [Inquirer package](https://www.npmjs.com/package/inquirer) to interact with the user via the command line, and the [console.table package](https://www.npmjs.com/package/console.table) to print MySQL rows to the console.
+  ## Usage
+  *Instructions and/or Examples for utilizing the project:*
 
-**Important**: You will be committing a file that contains your database credentials. Make sure that your MySQL password is not used for any other personal accounts, because it will be visible on GitHub. In upcoming lessons, you will learn how to better secure this password, or you can start researching npm packages now that could help you.
+  A turorial video is provided at: 
+  
+  ![Screenshot of application](util/example/screenshot.png)
+  
+  ## Questions
 
-You might also want to make your queries asynchronous. MySQL2 exposes a `.promise()` function on Connections to upgrade an existing non-Promise connection to use Promises. To learn more and make your queries asynchronous, refer to the [npm documentation on MySQL2](https://www.npmjs.com/package/mysql2).
+  GitHub: [@BrigittePowers](https://api.github.com/users/BrigittePowers)
 
-Design the database schema as shown in the following image:
-
-![Database schema includes tables labeled “employee,” role,” and “department.”](./Assets/12-sql-homework-demo-01.png)
-
-As the image illustrates, your schema should contain the following three tables:
-
-* `department`
-
-    * `id`: `INT PRIMARY KEY`
-
-    * `name`: `VARCHAR(30)` to hold department name
-
-* `role`
-
-    * `id`: `INT PRIMARY KEY`
-
-    * `title`: `VARCHAR(30)` to hold role title
-
-    * `salary`: `DECIMAL` to hold role salary
-
-    * `department_id`: `INT` to hold reference to department role belongs to
-
-* `employee`
-
-    * `id`: `INT PRIMARY KEY`
-
-    * `first_name`: `VARCHAR(30)` to hold employee first name
-
-    * `last_name`: `VARCHAR(30)` to hold employee last name
-
-    * `role_id`: `INT` to hold reference to employee role
-
-    * `manager_id`: `INT` to hold reference to another employee that is the manager of the current employee (`null` if the employee has no manager)
-
-You might want to use a separate file that contains functions for performing specific SQL queries you'll need to use. A constructor function or class could be helpful for organizing these. You might also want to include a `seeds.sql` file to pre-populate your database, making the development of individual features much easier.
-
-## Bonus
-
-Try to add some additional functionality to your application, such as the ability to do the following:
-
-* Update employee managers.
-
-* View employees by manager.
-
-* View employees by department.
-
-* Delete departments, roles, and employees.
-
-* View the total utilized budget of a department&mdash;in other words, the combined salaries of all employees in that department.
-
-## Grading Requirements
-
-This homework is graded based on the following criteria:
-
-### Deliverables: 10%
-
-* Your GitHub repository containing your application code.
-
-### Walkthrough Video: 27%
-
-* A walkthrough video that demonstrates the functionality of the employee tracker must be submitted, and a link to the video should be included in your README file.
-
-* The walkthrough video must show all of the technical acceptance criteria being met.
-
-* The walkthrough video must demonstrate how a user would invoke the application from the command line.
-
-* The walkthrough video must demonstrate a functional menu with the options outlined in the acceptance criteria.
-
-### Technical Acceptance Criteria: 40%
-
-* Satisfies all of the preceding acceptance criteria plus the following:
-
-    * Uses the [Inquirer package](https://www.npmjs.com/package/inquirer).
-
-    * Uses the [MySQL2 package](https://www.npmjs.com/package/mysql2) to connect to a MySQL database.
-
-    * Uses the [console.table package](https://www.npmjs.com/package/console.table) to print MySQL rows to the console.
-
-* Follows the table schema outlined in the homework instructions.
-
-### Repository Quality: 13%
-
-* Repository has a unique name.
-
-* Repository follows best practices for file structure and naming conventions.
-
-* Repository follows best practices for class/id naming conventions, indentation, quality comments, etc.
-
-* Repository contains multiple descriptive commit messages.
-
-* Repository contains a high-quality README with description and a link to a walkthrough video.
-
-### Application Quality 10%
-
-* The application user experience is intuitive and easy to navigate.
-
-### Bonus
-
-Fulfilling any of the following can add up to 20 points to your grade. Note that the highest grade you can achieve is still 100:
-
-* Application allows users to update employee managers (2 points).
-
-* Application allows users to view employees by manager (2 points).
-
-* Application allows users to view employees by department (2 points).
-
-* Application allows users to delete departments, roles, and employees (2 points for each).
-
-* Application allows users to view the total utilized budget of a department&mdash;in other words, the combined salaries of all employees in that department (8 points).
-
-## Review
-
-You are required to submit BOTH of the following for review:
-
-* A walkthrough video demonstrating the functionality of the application.
-
-* The URL of the GitHub repository, with a unique name and a README describing the project.
-
-- - -
-© 2021 Trilogy Education Services, LLC, a 2U, Inc. brand. Confidential and Proprietary. All Rights Reserved.
+  TownPortal is originally made by BrigittePowers. 
+  If you have any questions or need specialized help, the project manager 
+  can be reached at reyhn701@gmail.com. 
+  Include the subject line "TownPortal SUPPORT".
+  
