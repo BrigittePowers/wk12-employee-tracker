@@ -44,8 +44,8 @@
   ## Usage
   *Instructions and/or Examples for utilizing the project:*
 
-  [Demo Video Part ONE](https://watch.screencastify.com/v/CIsok1zwjkl8MYyPmMFP)
-  [Demo Video Part TWO](https://watch.screencastify.com/v/fkvAs4MldxITW4nZIoL6)
+  * [Demo Video Part ONE](https://watch.screencastify.com/v/CIsok1zwjkl8MYyPmMFP)
+  * [Demo Video Part TWO](https://watch.screencastify.com/v/fkvAs4MldxITW4nZIoL6)
   
   ![Screenshot of application](util/example/screenshot.png)
   
