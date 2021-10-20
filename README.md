@@ -23,7 +23,7 @@
 
   *Connect to your MySQL server*
 
-  * Use the .envEXAMPLE folder as a template to create your .env file. The example databse in employee.sql is named **employee_db**
+  * Use the .envEXAMPLE folder as a template to create your .env file. The example database in employee.sql is named **employee_db**
 
   *How to run the program*
 
