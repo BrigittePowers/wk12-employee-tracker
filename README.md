@@ -38,12 +38,14 @@
    * [Inquirer package](https://www.npmjs.com/package/inquirer)
    * [console.table package](https://www.npmjs.com/package/console.table)
    * [dotenv package](https://www.npmjs.com/package/dotenv)
+   * [figlet package](https://www.npmjs.com/package/figlet)
 
 
   ## Usage
   *Instructions and/or Examples for utilizing the project:*
 
-  A turorial video is provided at: 
+  [Demo Video Part ONE](https://watch.screencastify.com/v/CIsok1zwjkl8MYyPmMFP)
+  [Demo Video Part TWO](https://watch.screencastify.com/v/fkvAs4MldxITW4nZIoL6)
   
   ![Screenshot of application](util/example/screenshot.png)
   

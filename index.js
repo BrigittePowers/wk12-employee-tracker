@@ -1,6 +1,7 @@
 // external dependencies
 const mysql2 = require('mysql2');
 require('dotenv').config();
+var figlet = require('figlet');
 
 // internal dependencies
 const { init } = require('./util/functions');
@@ -13,7 +14,17 @@ const dbConnect = mysql2.createConnection({
     password: process.env.DB_PASS,
     database: process.env.DB_NAME
 })
-dbConnect.connect(err => {
+dbConnect.connect (err => {
     if (err) throw err;
-    init();
+    figlet('Town Portal', async function(err, data) {
+        if (err) throw err;
+        await console.log(data);
+        await console.log('Version 2.0.1 by BrigittePowers');
+        await console.log('~2021');
+        await console.log(``);
+        await console.log(``);
+        await console.log(``);
+        init();
+    })
+    
 })
